@@ -43,21 +43,22 @@ This MVP supports coupon creation, validation, and application logic with cachin
 - `POST /users` — User login (creates user if not exists)
 
 
-##  Quick Start (Docker)
+##  Quick Start
 
-1. **Clone the repo:**
-   ```sh
-   git clone https://github.com/Siddheshk02/coupon-system.git
-   cd coupon-system
-   ```
+1. Deployed API URL : https://coupon-system-mjzu.onrender.com/
 
-2. **Build and run everything:**
-   ```sh
-   docker-compose up --build
-   ```
-
-3. **API will be available at:**  
-   [http://localhost:8080](http://localhost:8080)
+2. Docker :
+   1. **Clone the repo:**
+      ```sh
+      git clone https://github.com/Siddheshk02/coupon-system.git
+      cd coupon-system
+      ```
+   2. **Build and run everything:**
+      ```sh
+      docker-compose up --build
+      ```
+   3. **API will be available at:**  
+      [http://localhost:8080](http://localhost:8080)
 
 ##  Example Requests
 
