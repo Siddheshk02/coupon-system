@@ -28,7 +28,7 @@ func (i *ItemRepository) CreateItem(ctx context.Context, req Item) error {
 }
 
 func (i *ItemRepository) GetItems(ctx context.Context, id int, category string) ([]Item, error) {
-	rows, err := i.DB.QueryContext(ctx, `SELECT id, category, price FROM items WHERE ($1 = 0 OR id = $1) and ($2 = '' OR category = $2) ORDER BY id`)
+	rows, err := i.DB.QueryContext(ctx, `SELECT id, category, price FROM items WHERE ($1 = 0 OR id = $1) and ($2 = '' OR category = $2) ORDER BY id`, id, category)
 	if err != nil {
 		return nil, err
 	}

@@ -21,24 +21,25 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 	return &UserRepository{DB: db}
 }
 
-func (u *UserRepository) Login(ctx context.Context, req User) error {
+func (u *UserRepository) Login(ctx context.Context, req User) (int, error) {
 	var user User
+	var id int
 	err := u.DB.QueryRowContext(ctx, "SELECT id, password FROM users WHERE name = $1", req.Name).Scan(&user.ID, &user.Password)
 	if err == sql.ErrNoRows {
 		// User does not exist, create new user
-		_, err := u.DB.ExecContext(ctx, "INSERT INTO users (name, password, created_at) VALUES ($1, $2, $3)", req.Name, req.Password, time.Now())
+		err := u.DB.QueryRowContext(ctx, "INSERT INTO users (name, password, created_at) VALUES ($1, $2, $3) RETURNING id", req.Name, req.Password, time.Now()).Scan(&id)
 		if err != nil {
-			return err
+			return 0, err
 		}
-		return nil // User created and logged in
+		return id, nil // User created and logged in
 	} else if err != nil {
-		return err
+		return 0, err
 	}
 
 	// User exists, check password
 	if user.Password != req.Password {
-		return sql.ErrNoRows
+		return 0, sql.ErrNoRows
 	}
 
-	return nil // Login successful
+	return user.ID, nil // Login successful
 }

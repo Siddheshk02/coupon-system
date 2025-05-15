@@ -1,0 +1,48 @@
+services:
+  coupon-system:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DB_URL=postgres://postgres:Siddhesh@postgres:5432/coupon-db?sslmode=disable
+    depends_on:
+      - postgres
+      - migrate
+    networks:
+      - coupon-network
+    restart: on-failure
+
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=coupon-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Siddhesh
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - coupon-network
+
+  migrate:
+    image: migrate/migrate
+    depends_on:
+      - postgres
+    volumes:
+      - ./migrations:/migrations
+    entrypoint: [ "migrate", "-path", "/migrations", "-database", "postgres://postgres:Siddhesh@postgres:5432/coupon-db?sslmode=disable", "up" ]
+    networks:
+      - coupon-network
+    restart: on-failure
+
+networks:
+  coupon-network:
+    driver: bridge
+
+volumes:
+  pgdata:

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/Siddheshk02/coupon-system/internal/repository"
@@ -27,12 +28,15 @@ func (h *UserHandler) UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.Repo.Login(ctx, req)
+	id, err := h.Repo.Login(ctx, req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{"message": "logged-in successfully"})
+	json.NewEncoder(w).Encode(map[string]string{
+		"user_id": strconv.Itoa(id),
+		"message": "logged-in successfully",
+	})
 }
