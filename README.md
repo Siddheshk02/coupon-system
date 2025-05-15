@@ -13,9 +13,6 @@ This MVP supports coupon creation, validation, and application logic with cachin
 - **OpenAPI Docs**: Swagger UI available.
 - **Dockerized**: One-command setup for API and DB.
 
----
-
----
 
 ##  Architecture
 
@@ -25,7 +22,6 @@ This MVP supports coupon creation, validation, and application logic with cachin
 - **Caching**: [patrickmn/go-cache](https://github.com/patrickmn/go-cache) for TTL-based in-memory caching.
 - **Database Migrations**: SQL migration files in `/migrations`.
 
----
 
 ##  API Endpoints
 
@@ -46,7 +42,6 @@ This MVP supports coupon creation, validation, and application logic with cachin
 
 - `POST /users` — User login (creates user if not exists)
 
----
 
 ##  Quick Start (Docker)
 
@@ -64,12 +59,22 @@ This MVP supports coupon creation, validation, and application logic with cachin
 3. **API will be available at:**  
    [http://localhost:8080](http://localhost:8080)
 
----
+##  Example Requests
 
----
+**Get All Coupons**
+```sh
+curl http://localhost:8080/coupons
+```
+
+**Validate Coupon**
+```sh
+curl -X POST http://localhost:8080/coupons/validate \
+  -H "Content-Type: application/json" \
+  -d '{"coupon_code":"SAVE20","cart_items":[{"id":"12","category":"painkiller"}],"order_total":700,"timestamp":"2025-05-05T15:00:00Z"}'
+```
+
 
 ##  Swagger/OpenAPI Docs
 
 - https://app.swaggerhub.com/apis/KHANDAGALESID02_1/coupon-system_api/1.0
 
----
